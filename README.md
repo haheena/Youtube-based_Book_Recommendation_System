@@ -1,7 +1,5 @@
-# Youtube-based_Book_Recommendation_System
-유튜브 동영상 기반 도서 추천 알고리즘
-
 # 유튜브 시청기록 기반 도서 추천 시스템 <br/> (Youtube-based_Book_Recommendation_System) <hr/> 
+유튜브 동영상 기반 도서 추천 알고리즘
 
 ## 💻 프로젝트 소개
 
