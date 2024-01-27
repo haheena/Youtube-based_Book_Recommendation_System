@@ -1,0 +1,340 @@
+```{r}
+library(ggplot2)
+library(tidyr)
+library(tidyverse)
+library(data.table)
+library(dplyr)
+library(magrittr)
+library(factoextra)
+library(cluster)
+library(gridExtra)
+```
+
+```{r}
+df = read.csv("C:/Users/김민주/Desktop/SKKU/P-SAT/회귀/인기도서.csv", head = T)
+df <- na.omit(df)
+```
+
+```{r}
+#불필요한 행, 열 제거
+book <- df %>%
+  select(-c(7:11)) %>%
+  select(-c("VLM_NM", "ANALS_LON_TOT_CO")) %>%
+  filter(ANALS_TY_CD == 5) %>%
+  filter(ANALS_PD_CD_NM == '90일')
+```
+
+```{r}
+#kdc 분류
+book$KDC_NM <- as.integer(book$KDC_NM)
+book <- book %>%
+  group_by(KDC_NM) %>%
+  mutate(kdc = case_when(
+    KDC_NM < 100 ~ "총류",  
+    (KDC_NM >= 100 & KDC_NM < 200) ~ "철학",
+    (KDC_NM >= 200 & KDC_NM < 300) ~ "종교",
+    (KDC_NM >= 300 & KDC_NM < 400) ~ "사회과학",
+    (KDC_NM >= 400 & KDC_NM < 500) ~ "자연과학",
+    (KDC_NM >= 500 & KDC_NM < 600) ~ "기술과학",
+    (KDC_NM >= 600 & KDC_NM < 700) ~ "예술",
+    (KDC_NM >= 700 & KDC_NM < 800) ~ "언어",
+    (KDC_NM >= 800 & KDC_NM < 900) ~ "문학",
+    TRUE ~ "역사" 
+  )) %>%
+  ungroup()
+```
+
+```{r}
+#성별, kdc, 나이 열만 추출
+aks <- book %>%
+  filter(kdc != "총류") %>%
+  filter(kdc != "언어") %>%
+  group_by(AGE_FLAG_NM, kdc, SEXDSTN_FLAG_NM) %>%
+  summarize(count = n()) %>%
+  ungroup()
+```
+
+```{r}
+#결측값 0으로 대체
+aks_as <- aks %>%
+  group_by(AGE_FLAG_NM, SEXDSTN_FLAG_NM) %>%
+  spread(kdc, count) %>%
+  mutate(종교 = ifelse(is.na(종교), 0, 종교))
+
+aks_as <- aks_as %>%
+  gather(key = "kdc", value = "count",  -AGE_FLAG_NM, -SEXDSTN_FLAG_NM)
+```
+
+```{r}
+#total_kdc : 전체 분류별 대출 권수 분포 (나이, 성별 기준 x)
+total_kdc <- aks_as %>%
+  group_by(kdc) %>%
+  summarize(count = sum(count)) %>%
+  ungroup()
+```
+
+```{r}
+#count_p는 전체 이용자 대비 대출된 분류의 비율
+total_kdc <- total_kdc %>%
+  group_by(kdc) %>%
+  mutate(count_p = count / sum(total_kdc$count))
+```
+
+
+```{r}
+#plot-------------------------------
+# AGE_FLAG_NM과 SEXDSTN_FLAG_NM의 모든 조합 (영유아 제외)
+combinations <- expand.grid(age = c('초등(8~13)', "청소년(14~19)", "20대", '30대', '40대', '50대', '60대 이상'),
+                            sex = c('남성', '여성'))
+```
+
+```{r}
+plot_list = list()
+data <- data.frame()
+
+for (i in 1:nrow(combinations)) {
+  age <- combinations$age[i]
+  sex <- combinations$sex[i]
+  
+  filtered_data <- aks_as %>%
+    filter(AGE_FLAG_NM == age, SEXDSTN_FLAG_NM == sex) %>%
+    mutate(count_p = count / sum(count))
+  
+  filtered_data <- filtered_data %>%
+    mutate(total_p = count_p / total_kdc$count_p)
+  
+  plot_title <- paste(age, sex)
+  
+  plot <- filtered_data %>%
+    ggplot(aes(x = kdc, y = total_p)) +
+    theme_classic() +
+    geom_bar(stat = 'identity') +
+    labs(x = 'KDC 분류', y = '대출 비율') +
+    ggtitle(plot_title)
+  
+  # 생성한 플랏 저장
+  plot_list[[i]] <- plot
+  data <- bind_rows(data, filtered_data)
+}
+```
+
+```{r}
+#플랏 출력
+for (i in 1:length(plot_list)){
+  print(plot_list[[i]])
+}
+```
+
+```{r}
+colnames(data)<-c('age','sex','kdc','count','count_p','total_p')
+#count : 대출 횟수
+#count_p : 해당 그룹에서 해당 kdc 분류가 대출된 비율
+#total_p : count_p를 전체에서 해당 kdc 분류가 대출된 비율로 나눔
+```
+
+```{r}
+data2 <- data %>%
+  select(-c('count', 'count_p'))
+
+data2 <- data2 %>%
+  group_by(age, sex) %>%
+  spread(kdc, total_p) %>%
+  ungroup()
+
+data3 <- data2 %>%
+  select(-c("age", "sex"))
+
+```
+
+K-means
+```{r}
+#최적 클러스터 개수 plot
+k1 <- fviz_nbclust(data3,FUNcluster=kmeans,method="wss",linecolor = "aquamarine4")
+k2 <- fviz_nbclust(data3,FUNcluster=kmeans,method="silhouette",linecolor = "aquamarine4")
+grid.arrange(k1,k2, ncol=2)
+```
+
+```{r}
+#k-means 실행
+kmean<-kmeans(data3, 3, nstart = 1, iter.max = 50)
+
+#시각화로 확인
+fviz_cluster(kmean, data = data3,geom="point")+
+  theme_light()+
+  ggtitle("K-means result")+
+  scale_color_manual(values = hcl.colors(5, palette = "cold"))+
+  scale_fill_manual(values = hcl.colors(5, palette = "cold"))+
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold"))
+```
+
+```{r}
+kmean$cluster
+```
+
+```{r}
+#실루엣 계수 확인
+km_sil<-silhouette(kmean$cluster,dist(data3))
+fviz_silhouette(km_sil)
+```
+
+```{r}
+#클러스터별 평균
+mean_1 <- data2[c(3,4,5,6,13,14),]
+mean_2 <- data2[c(1,2,7,8,9,10),]
+mean_3 <- data2[c(11,12),]
+```
+
+```{r}
+#클러스터 1의 분류별 대출 비율 (평균)
+mean_1_t <- mean_1 %>%
+  select(-c("age", "sex"))
+m <- apply(mean_1_t,2,mean)
+mean_1_t <- rbind(mean_1_t, m)
+mean_1_t <- mean_1_t[-c(1:6),]
+mean_1_t <- mean_1_t %>%
+  gather(key = "kdc", value = "total_p") 
+```
+
+```{r}
+#클러스터 2의 분류별 대출 비율 (평균)
+mean_2_t <- mean_2 %>%
+  select(-c("age", "sex"))
+m2 <- apply(mean_2_t,2,mean)
+mean_2_t <- rbind(mean_2_t, m2)
+mean_2_t <- mean_2_t[-c(1:6),]
+mean_2_t <- mean_2_t %>%
+  gather(key = "kdc", value = "total_p") 
+```
+
+```{r}
+#클러스터 3의 분류별 대출 비율 (평균)
+mean_3_t <- mean_3 %>%
+  select(-c("age", "sex"))
+m3 <- apply(mean_3_t,2,mean)
+mean_3_t <- rbind(mean_3_t, m3)
+mean_3_t <- mean_3_t[-c(1:2),]
+mean_3_t <- mean_3_t %>%
+  gather(key = "kdc", value = "total_p") 
+```
+
+```{r}
+#클러스터별 분류별 대출 비율
+ggplot() +
+  theme_light() +
+  geom_line(data = mean_1_t, aes(x = kdc, y = total_p, color = 'cluster1'), group = 1) +
+  geom_point(data = mean_1_t, aes(x = kdc, y = total_p, color = 'cluster1'), size = 3) +
+  geom_line(data = mean_2_t, aes(x = kdc, y = total_p, color = 'cluster2'), group = 2) +
+  geom_point(data = mean_2_t, aes(x = kdc, y = total_p, color = 'cluster2'), size = 3) +
+  geom_line(data = mean_3_t, aes(x = kdc, y = total_p, color = 'cluster3'), group = 3) +
+  geom_point(data = mean_3_t, aes(x = kdc, y = total_p, color = 'cluster3'), size = 3) +
+  scale_color_manual(values = hcl.colors(3, palette = "cold"))+
+  theme(legend.position = 'top')
+```
+
+K-medoids 
+
+```{r}
+medclust<-pam(data3, 3, stand=FALSE)
+
+fviz_cluster(medclust, data = data3,geom="point")+
+  theme_light()+
+  ggtitle("K-means result")+
+  scale_color_manual(values = hcl.colors(3, palette = "cold"))+
+  scale_fill_manual(values = hcl.colors(3, palette = "cold"))+
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold"))
+medclust$cluster
+```
+
+```{r}
+med_sil<-silhouette(medclust$cluster,dist(data3))
+fviz_silhouette(med_sil)
+```
+
+```{r}
+#클러스터별 평균
+med_1 <- data2[c(1,2,7,8,9,10),]
+med_2 <- data2[c(3,4,5,6,14,15),]
+med_3 <- data2[c(10,11),]
+```
+
+```{r}
+#클러스터 1의 분류별 대출 비율 (평균)
+med_1_t <- med_1 %>%
+  select(-c("age", "sex"))
+me <- apply(med_1_t,2,mean)
+med_1_t <- rbind(med_1_t, me)
+med_1_t <- mean_1_t[-c(1:6),]
+med_1_t <- mean_1_t %>%
+  gather(key = "kdc", value = "total_p") 
+```
+
+```{r}
+#클러스터 2의 분류별 대출 비율 (평균)
+med_2_t <- med_2 %>%
+  select(-c("age", "sex"))
+me2 <- apply(med_2_t,2,mean)
+med_2_t <- rbind(med_2_t, me2)
+med_2_t <- mean_2_t[-c(1:6),]
+med_2_t <- mean_2_t %>%
+  gather(key = "kdc", value = "total_p")
+```
+
+```{r}
+#클러스터 3의 분류별 대출 비율 (평균)
+med_3_t <- med_3 %>%
+  select(-c("age", "sex"))
+me3 <- apply(med_3_t,2,mean)
+med_3_t <- rbind(med_3_t, me3)
+med_3_t <- mean_3_t[-c(1:2),]
+med_3_t <- mean_3_t %>%
+  gather(key = "kdc", value = "total_p") 
+```
+
+```{r}
+ggplot() +
+  theme_light() +
+  geom_line(data = med_1_t, aes(x = kdc, y = total_p, color = 'cluster1'), group = 1) +
+  geom_point(data = med_1_t, aes(x = kdc, y = total_p, color = 'cluster1'), size = 3) +
+  geom_line(data = med_2_t, aes(x = kdc, y = total_p, color = 'cluster2'), group = 2) +
+  geom_point(data = med_2_t, aes(x = kdc, y = total_p, color = 'cluster2'), size = 3) +
+  geom_line(data = med_3_t, aes(x = kdc, y = total_p, color = 'cluster3'), group = 3) +
+  geom_point(data = med_3_t, aes(x = kdc, y = total_p, color = 'cluster3'), size = 3) +
+  scale_color_manual(values = hcl.colors(3, palette = "cold"))+
+  theme(legend.position = 'top')
+```
+
+
+Hierarchical
+```{r}
+k1<-fviz_nbclust(data3,FUNcluster=hcut,method="wss",linecolor = "aquamarine4")
+k2<-fviz_nbclust(data3,FUNcluster=hcut,method="silhouette",linecolor = "aquamarine4")
+grid.arrange(k1,k2, ncol=2)
+```
+
+```{r}
+hclust<-hcut(data3, 3,hc_func='hclust')
+
+fviz_cluster(hclust, data = data3,geom="point")+
+  theme_light()+
+  ggtitle("Hierarchical result")+
+  scale_color_manual(values = hcl.colors(3, palette = "cold"))+
+  scale_fill_manual(values = hcl.colors(3, palette = "cold"))+
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold"))
+hclust$cluster
+```
+
+```{r}
+hier_sil<-silhouette(hclust$cluster,dist(data3))
+fviz_silhouette(hier_sil)
+```
+
+```{r}
+#클러스터별 평균
+med_1 <- data2[c(1,2,7,8,9,10),]
+med_2 <- data2[c(3,4,5,6,14,15),]
+med_3 <- data2[c(10,11),]
+```
+
