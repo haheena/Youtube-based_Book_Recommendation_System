@@ -1,4 +1,4 @@
-# 유튜브 시청기록 기반 도서 추천 시스템 <br/> (Youtube-based_Book_Recommendation_System) <hr/> 
+# 유튜브 시청기록 기반 도서 추천 시스템 <br/> (Youtube-based_Book_Recommendation_System)
 
 ## 📌 개요
 
