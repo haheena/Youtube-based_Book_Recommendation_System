@@ -93,7 +93,7 @@
   
   <p align="center"><img src="https://github.com/Youjin-Seo/Youtube-based_Book_Recommendation_System/assets/89994770/15b1b06b-5f7a-4e55-bfe1-68f89f0f83c0"  width="80%" height="80%"/></p>
   <p align="center">
-    수식 ▲
+    ▲ 수식
 <br/>
 
 2️⃣ 이미 특성 추출 및 WordCount, 필터링이 진행된 데이터였기 때문에 식을 그대로 적용하기는 부적절하다고 판단하여 Score식을 custom 함
@@ -162,10 +162,11 @@
 **KR-SBERT**를 이용하여 제목과 키워드의 유사도 계산<br/>
 🔜 그 결과, 영상의 핵심 내용과는 관련이 없지만 Rank가 높았던 단어들의 유사도는 상대적으로 낮았고, 영상의 핵심 내용과 관련있지만 Rank가 낮았던 단어들의 유사도가 상대적으로 높았음
 
-**최종 score 식**
+$$score = similarity^2 * textrank$$
 
 <p align="center">
-$$score = similarity^2 * textrank$$
+**▲ 최종 score 식**
+    
 <br/>
 
 정보성 영상의 경우 제목에 영상에 대한 정보가 더욱 함축적으로 들어가있기 때문에 제목과 키워드 간 유사도에 제곱을 하여 가중치를 줌
