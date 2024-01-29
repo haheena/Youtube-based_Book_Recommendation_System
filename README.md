@@ -92,7 +92,7 @@
     단어의 빈도와 문서의 빈도를 사용하여 단어마다 중요한 정도에 따라 가중치를 부여하는 방법으로, 모든 문서에 등장하는 단어는 중요도가 낮고, 특정 문서에만 등장하는 단어는 중요도가 높다는 것
     
     수식 ▼
-  <img src="https://github.com/Youjin-Seo/Youtube-based_Book_Recommendation_System/assets/89994770/15b1b06b-5f7a-4e55-bfe1-68f89f0f83c0"  width="200" height="400"/>
+  <p align="center"><img src="https://github.com/Youjin-Seo/Youtube-based_Book_Recommendation_System/assets/89994770/15b1b06b-5f7a-4e55-bfe1-68f89f0f83c0"  width="50%" height="50%"/></p>
 <br/>
 
 2️⃣ 이미 특성 추출 및 WordCount, 필터링이 진행된 데이터였기 때문에 식을 그대로 적용하기는 부적절하다고 판단하여 Score식을 custom 함
