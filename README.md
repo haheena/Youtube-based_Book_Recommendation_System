@@ -164,9 +164,8 @@
 
 **최종 score 식**
 
-
-| $$score = similarity^2 * textrank$$ |
-|------------------------------------|
+<p align="center">
+| $score = similarity^2 * textrank$ |
 <br/>
 
 정보성 영상의 경우 제목에 영상에 대한 정보가 더욱 함축적으로 들어가있기 때문에 제목과 키워드 간 유사도에 제곱을 하여 가중치를 줌
