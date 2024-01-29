@@ -137,6 +137,5 @@
 
 <p align="center"><img src = "https://github.com/Youjin-Seo/Youtube-based_Book_Recommendation_System/assets/89994770/40bd6d4d-2618-4546-8399-c66f1acfdf41" width="80%" height="80%"/></p>
 
-<br/> 
 전반적으로 핵심 소재가 잘 추출되었지만, 영상의 핵심 내용과는 크게 관련이 없지만 Rank가 높거나, 중요한 소재임에도 Rank가 낮은 경우가 생김<br/>
 → 키워드 추출 개선 필요
