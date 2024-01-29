@@ -1,8 +1,8 @@
 (update 2024.01.28) 기준 분야별 워드클라우드<br/>
 <br/>
 
-<img src = "https://github.com/Youjin-Seo/Youtube-based_Book_Recommendation_System/assets/89994770/61e6f545-5ca4-4ecb-90a2-9b8d3b5d19dc" width="30%" height="30%">
-<img src = "https://github.com/Youjin-Seo/Youtube-based_Book_Recommendation_System/assets/89994770/4aae8ee4-50e8-46b0-92ca-f26b93f51f47" width="30%" height="30%">
+<img src = "https://github.com/Youjin-Seo/Youtube-based_Book_Recommendation_System/assets/89994770/61e6f545-5ca4-4ecb-90a2-9b8d3b5d19dc" width="40%" height="40%">
+<img src = "https://github.com/Youjin-Seo/Youtube-based_Book_Recommendation_System/assets/89994770/4aae8ee4-50e8-46b0-92ca-f26b93f51f47" width="40%" height="40%">
                      
 ![image](https://github.com/Youjin-Seo/Youtube-based_Book_Recommendation_System/assets/89994770/61e6f545-5ca4-4ecb-90a2-9b8d3b5d19dc)
 
