@@ -98,8 +98,9 @@
 
 2️⃣ 이미 특성 추출 및 WordCount, 필터링이 진행된 데이터였기 때문에 식을 그대로 적용하기는 부적절하다고 판단하여 Score식을 custom 함
 
-![image](https://github.com/Youjin-Seo/Youtube-based_Book_Recommendation_System/assets/89994770/edfeac5b-1adc-40c4-a96f-d7e6302abe32) |![image](https://github.com/Youjin-Seo/Youtube-based_Book_Recommendation_System/assets/89994770/5bcde536-d554-47a8-bad4-08f1a425cb00)
+<img src="https://github.com/Youjin-Seo/Youtube-based_Book_Recommendation_System/assets/89994770/edfeac5b-1adc-40c4-a96f-d7e6302abe32"  width="43%" height="43%"/> |![image](https://github.com/Youjin-Seo/Youtube-based_Book_Recommendation_System/assets/89994770/5bcde536-d554-47a8-bad4-08f1a425cb00)
 --- | --- |
+
 
 **score가 높을수록 해당 분야의 이슈를 대표**한다고 판단 → 워드클라우드 생성
 
