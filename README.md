@@ -1,4 +1,5 @@
-![image](https://github.com/Youjin-Seo/Youtube-based_Book_Recommendation_System/assets/89994770/ff30fe00-0530-49a2-962b-7c4f523e11fd)# 유튜브 시청기록 기반 도서 추천 시스템 <br/> (Youtube-based_Book_Recommendation_System)
+# 유튜브 시청기록 기반 도서 추천 시스템 <br/> (Youtube-based_Book_Recommendation_System)
+
 ## 📌 개요
 
 ### 배경
