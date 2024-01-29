@@ -104,3 +104,39 @@
 **score가 높을수록 해당 분야의 이슈를 대표**한다고 판단 → 워드클라우드 생성
 
   <p align="center"><img src="https://github.com/Youjin-Seo/Youtube-based_Book_Recommendation_System/assets/89994770/8e97d094-0efd-40c5-a99b-c26fe737863f"  width="80%" height="80%"/></p>
+<br/>
+<br/>
+
+## 📌 유튜브 영상 키워드 추출
+
+유튜브 **자막이 우리의 스크립트**가 되는데, 요약하고자 하는 스크립트가 어떤 도메인인지 알 수 없는 상황! (즉, 학습 데이터의 부재)<br/>
+→ 비지도 학습인 `TextRank 알고리즘` 사용<br/>
+<br/>
+
+- ❓ **TextRank**
+    
+    먼저, `PageRank`란 특정 페이지를 인용하는 다른 페이지가 얼마나 있는지를 정규화하여 세는 방법<br/>
+    영향력 있는(PageRank가 높은) 페이지에게서 인용될수록 중요도가 올라감,<br/>
+    다른 많은 페이지를 인용한 페이지에게서 인용되었다면 인용된 페이지가 차지하는 비중이 낮아짐
+    
+    `TextRank`란, PageRank 알고리즘을 응용하여, 문서 내 문장 또는 단어의 Ranking을 계산하는 알고리즘<br/>
+<br/>    
+
+**💫 TextRank 알고리즘을 적용한 키워드 추출 과정**
+
+1️⃣ 텍스트 스크립트 크롤링 및 전처리<br/>
+
+유튜브 제공 api를 이용해서 자막 크롤링.<br/>
+문서를 문장 단위로 분리 후, 형태소 토큰화. 이후 품사 태깅을 통해 어근과 명사만 추출
+
+2️⃣ 단어 간 가중치 그래프 생성
+
+3️⃣ TextRank 알고리즘 적용
+
+4️⃣ 결과 확인
+
+<p align="center"><img src = "https://github.com/Youjin-Seo/Youtube-based_Book_Recommendation_System/assets/89994770/40bd6d4d-2618-4546-8399-c66f1acfdf41" width="80%" height="80%"/></p>
+
+<br/> 
+전반적으로 핵심 소재가 잘 추출되었지만, 영상의 핵심 내용과는 크게 관련이 없지만 Rank가 높거나, 중요한 소재임에도 Rank가 낮은 경우가 생김<br/>
+→ 키워드 추출 개선 필요
