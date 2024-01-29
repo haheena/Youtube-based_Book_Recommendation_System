@@ -165,8 +165,7 @@
 **최종 score 식**
 
 <p align="center">
-    
-| $$score = similarity^2 * textrank$$ |
+| $score = similarity^2 * textrank$ |
 |------------------------------------|
 <br/>
 
