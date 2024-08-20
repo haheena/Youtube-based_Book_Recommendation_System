@@ -157,7 +157,7 @@ $$score = similarity^2 * textrank$$
 
 1. 각 KDC분류에서 3000개씩 총 24,000개의 데이터로 지도학습 진행
 2. L-LDA 적용 후 KDC별 단어 분포 확인
-![image](https://github.com/Youjin-Seo/Youtube-based_Book_Recommendation_System/assets/89994770/b0f610f4-33ca-4323-85d8-b4b8663f81e8)
+![image](https://github.com/Youjin-Seo/Youtube-based_Book_Recommendation_System/assets/89994770/b0f610f4-33ca-4323-85d8-b4b8663f81e8 width="50%" height="50%"/)
 3. 유튜브 영상 키워드를 이용하여 1차 선호도 분포 형성
 ![image](https://github.com/Youjin-Seo/Youtube-based_Book_Recommendation_System/assets/89994770/bd22b624-c5d4-491d-bb75-93c12546fe90)
 
