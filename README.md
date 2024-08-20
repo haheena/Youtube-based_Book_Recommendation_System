@@ -68,24 +68,12 @@ KOSIS 국민도서 실태조사에 따르면 모든 연령층 및 성별에 무�
     
     → 유의미한 사회적 이슈보다는 **보편적**으로 많이 나오는 **단어들이 단순 나열되는 문제**가 발생하여 기사의 분야를 하나의 문서로 보고 **TF-IDF 아이디어 적용**
     
-2. 스케일링을 통해 페널티를 완화하여 Score식을 수정
-- ❓ **TF-IDF**
-    
-    단어의 빈도와 문서의 빈도를 사용하여 단어마다 중요한 정도에 따라 가중치를 부여하는 방법으로, 모든 문서에 등장하는 단어는 중요도가 낮고, 특정 문서에만 등장하는 단어는 중요도가 높다는 것
-  
-  <p align="center"><img src="https://github.com/Youjin-Seo/Youtube-based_Book_Recommendation_System/assets/89994770/15b1b06b-5f7a-4e55-bfe1-68f89f0f83c0"  width="80%" height="80%"/></p>
-  <p align="center">
-    ▲ 수식
-<br/>
-
-2️⃣ 이미 특성 추출 및 WordCount, 필터링이 진행된 데이터였기 때문에 식을 그대로 적용하기는 부적절하다고 판단하여 Score식을 custom 함
-
-
-<img src="https://github.com/Youjin-Seo/Youtube-based_Book_Recommendation_System/assets/89994770/b2c29d0e-94f1-450a-97cb-9e7a13cd4c6a" width="50%" height="50%"><img src="https://github.com/Youjin-Seo/Youtube-based_Book_Recommendation_System/assets/89994770/1fb59e93-47cc-4549-9c23-e29e1934fb42" width="50%" height="50%">
-
-**score가 높을수록 해당 분야의 이슈를 대표**한다고 판단 → 워드클라우드 생성
+2. 스케일링을 통해 페널티를 완화하여 Score식을 수정 <br/>
+3. score가 높은 단어들을 이용해 워드클라우드 생성
 
   <p align="center"><img src="https://github.com/Youjin-Seo/Youtube-based_Book_Recommendation_System/assets/89994770/8e97d094-0efd-40c5-a99b-c26fe737863f"  width="80%" height="80%"/></p>
+
+그 결과 **사회 이슈를 반영한 단어의 등장 빈도 증가**
 <br/>
 <br/>
 
