@@ -71,7 +71,7 @@ KOSIS 국민도서 실태조사에 따르면 모든 연령층 및 성별에 무�
 2. 스케일링을 통해 페널티를 완화하여 Score식을 수정 <br/>
 3. score가 높은 단어들을 이용해 워드클라우드 생성
 
-  <p align="center"><img src="https://github.com/Youjin-Seo/Youtube-based_Book_Recommendation_System/assets/89994770/8e97d094-0efd-40c5-a99b-c26fe737863f"  width="80%" height="80%"/></p>
+  <p align="center"><img src="https://github.com/Youjin-Seo/Youtube-based_Book_Recommendation_System/assets/89994770/8e97d094-0efd-40c5-a99b-c26fe737863f"  width="50%" height="50%"/></p>
 
 그 결과 **사회 이슈를 반영한 단어의 등장 빈도 증가**
 <br/>
